@@ -9,7 +9,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@barhamon/filters": "^0.3.0",
+    "@barhamon/filters": "^0.3.1",
     "next": "10.1.3",
     "react": "17.0.2",
     "react-dom": "17.0.2"

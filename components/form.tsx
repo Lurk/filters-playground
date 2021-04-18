@@ -1,4 +1,4 @@
-import { RulesArray, operatorsAsArray } from "@barhamon/filters";
+import { RulesArray, operatorsAsArray, Operators } from "@barhamon/filters";
 import { Button } from "./button";
 
 const Rule: React.FC<{
@@ -9,6 +9,19 @@ const Rule: React.FC<{
   const updateRule = (type: number, value: any) => {
     const tmp: RulesArray<any, any> = [...rule];
     tmp[type] = value;
+    if (tmp[1] === Operators.contains) {
+      tmp[2] = tmp[2].toString();
+    } else if (
+      [
+        Operators.greaterThan,
+        Operators.lessThan,
+        Operators.greaterThanOrEqualTo,
+        Operators.lessThanOrEqualTo,
+      ].includes(tmp[1])
+    ) {
+      tmp[2] = !isNaN(parseInt(tmp[2])) ? parseInt(tmp[2]) : 0;
+    }
+
     replaceRule(tmp);
   };
 
