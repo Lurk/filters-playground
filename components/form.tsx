@@ -1,37 +1,43 @@
 import { RulesArray, operatorsAsArray } from "@barhamon/filters";
+import { useState } from "react";
 import { Button } from "./button";
 
 const Rule: React.FC<{
-  value: RulesArray<any, any>;
+  rule: RulesArray<any, any>;
   removeRule: () => void;
-}> = ({ value: [key, op, value], removeRule }) => {
+  replaceRule: (newRule: RulesArray<any, any>) => void;
+}> = ({ rule, removeRule, replaceRule }) => {
+  // const [rule, setRule] = useState(value);
+
+  const updateRule = (type: number, value: any) => {
+    const tmp: RulesArray<any, any> = [...rule];
+    tmp[type] = value;
+    // setRule(tmp);
+    replaceRule(tmp);
+  };
+
   return (
     <div className="w-full mb-2">
       <input
-        value={key}
-        onChange={() => {}}
+        value={rule[0]}
+        onChange={({ target }) => updateRule(0, target.value)}
         className="shadow appearance-none border rounded py-2 px-3 bg-gray-800 text-gray-300 leading-tight focus:outline-none focus:shadow-outline mr-2"
       />
       <select
         id="operators"
         className="shadow appearance-none border rounded py-2 px-3 bg-gray-800 text-gray-300 leading-tight focus:outline-none focus:shadow-outline mr-2"
-        value={op}
-        onChange={() => {}}
+        value={rule[1]}
+        onChange={({ target }) => updateRule(1, target.value)}
       >
         {operatorsAsArray().map((o) => (
-          <option
-            value={o.value}
-            // selected={op === o.value}
-            onChange={() => {}}
-            key={o.value}
-          >
+          <option value={o.value} key={o.value}>
             {o.content}
           </option>
         ))}
       </select>
       <input
-        value={value.toString()}
-        onChange={() => {}}
+        value={rule[2].toString()}
+        onChange={({ target }) => updateRule(2, target.value)}
         className="shadow appearance-none border rounded py-2 px-3 bg-gray-800 text-gray-300 leading-tight focus:outline-none focus:shadow-outline mr-2"
       />
       <Button onClick={removeRule} content="- remove rule" />
@@ -46,10 +52,17 @@ export const Form: React.FC<{
   const removeRule = (i: number) =>
     setFilters([...filters.slice(0, i), ...filters.slice(i + 1)]);
 
+  const replaceRule = (i: number, rule: RulesArray<any, any>) =>
+    setFilters([...filters.slice(0, i), rule, ...filters.slice(i + 1)]);
   return (
     <form>
       {filters.map((rule, i) => (
-        <Rule value={rule} key={i} removeRule={() => removeRule(i)} />
+        <Rule
+          rule={rule}
+          key={i}
+          removeRule={() => removeRule(i)}
+          replaceRule={(rule) => replaceRule(i, rule)}
+        />
       ))}
     </form>
   );
