@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import {
   toString,
   toQueryString,
@@ -9,6 +10,7 @@ import {
   Operators,
   fromQueryString,
 } from "@barhamon/filters";
+import { version, name } from "@barhamon/filters/package.json";
 import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -42,7 +44,18 @@ const Home: NextPage<{ fromUrl: RulesArray<any, any>[] }> = ({ fromUrl }) => {
         <title>filters playground</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      <header className="m-4 mb-6text-2xl text-gray-400">
+        <h1>
+          Playground for{" "}
+          <Link
+            href={`https://www.npmjs.com/package/@barhamon/filters/v/${version}`}
+          >
+            <a className="no-underline hover:underline text-gray-300">
+              {name}:{version}
+            </a>
+          </Link>
+        </h1>
+      </header>
       <main className="grid grid-cols-2 gap-2 m-4">
         <div className=" ">
           <Form filters={filters} setFilters={setFilters} />
