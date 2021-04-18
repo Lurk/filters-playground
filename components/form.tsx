@@ -23,7 +23,7 @@ const Rule: React.FC<{
         id="operators"
         className="shadow appearance-none border rounded py-2 px-3 bg-gray-800 text-gray-300 leading-tight focus:outline-none focus:shadow-outline mr-2"
         value={rule[1]}
-        onChange={({ target }) => updateRule(1, target.value)}
+        onChange={({ target }) => updateRule(1, parseInt(target.value))}
       >
         {operatorsAsArray().map((o) => (
           <option value={o.value} key={o.value}>
