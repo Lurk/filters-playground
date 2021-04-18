@@ -3,21 +3,38 @@ import {
   toString,
   toQueryString,
   toMongoQuery,
+  toArray,
   fromArray,
   RulesArray,
   Operators,
+  fromQueryString,
 } from "@barhamon/filters";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { NextPage } from "next";
+import { useRouter } from "next/router";
 import { Code } from "../components/code";
 import { Button } from "../components/button";
 import { Form } from "../components/form";
 
-export default function Home() {
-  const [filters, setFilters] = useState<RulesArray<any, any>[]>([]);
+function getRulesArrayFromQuery(str: any) {
+  if (str) {
+    try {
+      return toArray(fromQueryString(str));
+    } catch (e) {}
+  }
+  return [];
+}
 
+const Home: NextPage<{ fromUrl: RulesArray<any, any>[] }> = ({ fromUrl }) => {
+  const router = useRouter();
+  const [filters, setFilters] = useState<RulesArray<any, any>[]>(fromUrl);
   const addDummyRule = () => {
     setFilters([...filters, ["fieldName", Operators.equal, 0]]);
   };
+
+  useEffect(() => {
+    router.push(`/?filters=${toQueryString(fromArray(filters))}`);
+  }, [filters]);
 
   return (
     <div className="min-h-screen">
@@ -59,4 +76,10 @@ export default function Home() {
       <footer></footer>
     </div>
   );
-}
+};
+
+export default Home;
+
+Home.getInitialProps = (ctx) => {
+  return { fromUrl: getRulesArrayFromQuery(ctx.query.filters) };
+};
