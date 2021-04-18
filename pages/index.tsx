@@ -14,6 +14,7 @@ import { version, name } from "@barhamon/filters/package.json";
 import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import { Code } from "../components/code";
 import { Button } from "../components/button";
 import { Form } from "../components/form";
@@ -39,11 +40,12 @@ const Home: NextPage<{ fromUrl: RulesArray<any, any>[] }> = ({ fromUrl }) => {
   }, [filters]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex justify-between flex-col">
       <Head>
         <title>filters playground</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <header className="m-4 mb-6text-2xl text-gray-400">
         <h1>
           Playground for{" "}
@@ -56,7 +58,7 @@ const Home: NextPage<{ fromUrl: RulesArray<any, any>[] }> = ({ fromUrl }) => {
           </Link>
         </h1>
       </header>
-      <main className="grid grid-cols-2 gap-2 m-4">
+      <main className="grid grid-cols-2 gap-2 m-4 mb-auto">
         <div className=" ">
           <Form filters={filters} setFilters={setFilters} />
           <Button onClick={addDummyRule} content="+ add rule" />
@@ -86,7 +88,20 @@ const Home: NextPage<{ fromUrl: RulesArray<any, any>[] }> = ({ fromUrl }) => {
         </div>
       </main>
 
-      <footer></footer>
+      <footer className="m-4 flex justify-center">
+        <img
+          className="filter invert mr-2"
+          height="16"
+          width="16"
+          src="https://cdn.jsdelivr.net/npm/simple-icons@v4/icons/github.svg"
+        />
+        <a
+          className="no-underline hover:underline text-gray-400"
+          href="https://github.com/Lurk/filters-playground"
+        >
+          fork me
+        </a>
+      </footer>
     </div>
   );
 };
