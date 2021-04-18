@@ -28,7 +28,7 @@ export default function Home() {
 
       <main className="grid grid-cols-2 gap-2 m-4">
         <div className=" ">
-          <Form filters={filters} />
+          <Form filters={filters} setFilters={setFilters} />
           <Button onClick={addDummyRule} content="+ add rule" />
         </div>
         <div className="divide-y divide-gray-600">
