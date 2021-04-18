@@ -1,5 +1,4 @@
 import { RulesArray, operatorsAsArray } from "@barhamon/filters";
-import { useState } from "react";
 import { Button } from "./button";
 
 const Rule: React.FC<{
@@ -7,12 +6,9 @@ const Rule: React.FC<{
   removeRule: () => void;
   replaceRule: (newRule: RulesArray<any, any>) => void;
 }> = ({ rule, removeRule, replaceRule }) => {
-  // const [rule, setRule] = useState(value);
-
   const updateRule = (type: number, value: any) => {
     const tmp: RulesArray<any, any> = [...rule];
     tmp[type] = value;
-    // setRule(tmp);
     replaceRule(tmp);
   };
 
