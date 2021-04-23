@@ -1,13 +1,19 @@
-import { RulesArray, operatorsAsArray, Operators } from "@barhamon/filters";
+import {
+  operatorsAsArray,
+  Operators,
+  Filters,
+  removeRuleByIndex,
+  Rule as RuleType,
+} from "@barhamon/filters";
 import { Button } from "./button";
 
 const Rule: React.FC<{
-  rule: RulesArray<any, any>;
+  rule: RuleType<any, any>;
   removeRule: () => void;
-  replaceRule: (newRule: RulesArray<any, any>) => void;
+  replaceRule: (newRule: RuleType<any, any>) => void;
 }> = ({ rule, removeRule, replaceRule }) => {
   const updateRule = (type: number, value: any) => {
-    const tmp: RulesArray<any, any> = [...rule];
+    const tmp: RuleType<any, any> = [...rule];
     tmp[type] = value;
     if (tmp[1] === Operators.contains) {
       tmp[2] = tmp[2].toString();
@@ -55,13 +61,12 @@ const Rule: React.FC<{
 };
 
 export const Form: React.FC<{
-  filters: RulesArray<any, any>[];
-  setFilters: (filters: RulesArray<any, any>[]) => void;
+  filters: Filters<any>;
+  setFilters: (filters: Filters<any>) => void;
 }> = ({ filters, setFilters }) => {
-  const removeRule = (i: number) =>
-    setFilters([...filters.slice(0, i), ...filters.slice(i + 1)]);
+  const removeRule = (i: number) => setFilters(removeRuleByIndex(filters, i));
 
-  const replaceRule = (i: number, rule: RulesArray<any, any>) =>
+  const replaceRule = (i: number, rule: RuleType<any, any>) =>
     setFilters([...filters.slice(0, i), rule, ...filters.slice(i + 1)]);
   return (
     <form>

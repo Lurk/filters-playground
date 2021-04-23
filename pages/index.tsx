@@ -4,17 +4,14 @@ import {
   toString,
   toQueryString,
   toMongoQuery,
-  toArray,
-  fromArray,
-  RulesArray,
   Operators,
   fromQueryString,
+  Filters,
 } from "@barhamon/filters";
 import { version, name } from "@barhamon/filters/package.json";
 import { useState, useEffect } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { Code } from "../components/code";
 import { Button } from "../components/button";
 import { Form } from "../components/form";
@@ -22,21 +19,21 @@ import { Form } from "../components/form";
 function getRulesArrayFromQuery(str: any) {
   if (str) {
     try {
-      return toArray(fromQueryString(str));
+      return fromQueryString(str);
     } catch (e) {}
   }
   return [];
 }
 
-const Home: NextPage<{ fromUrl: RulesArray<any, any>[] }> = ({ fromUrl }) => {
+const Home: NextPage<{ fromUrl: Filters<any> }> = ({ fromUrl }) => {
   const router = useRouter();
-  const [filters, setFilters] = useState<RulesArray<any, any>[]>(fromUrl);
+  const [filters, setFilters] = useState<Filters<any>>(fromUrl);
   const addDummyRule = () => {
     setFilters([...filters, ["fieldName", Operators.equal, 0]]);
   };
 
   useEffect(() => {
-    router.push(`/?filters=${toQueryString(fromArray(filters))}`);
+    router.push(`/?filters=${toQueryString(filters)}`);
   }, [filters]);
 
   return (
@@ -46,7 +43,7 @@ const Home: NextPage<{ fromUrl: RulesArray<any, any>[] }> = ({ fromUrl }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <header className="m-4 mb-6text-2xl text-gray-400">
+      <header className="m-4 text-xl text-gray-400">
         <h1>
           Playground for{" "}
           <Link
@@ -65,25 +62,19 @@ const Home: NextPage<{ fromUrl: RulesArray<any, any>[] }> = ({ fromUrl }) => {
         </div>
         <div className="divide-y divide-gray-600">
           <Code command="filters">
-            <pre>{JSON.stringify(fromArray(filters), null, 2)}</pre>
-          </Code>
-
-          <Code command="toString(filters)" collapse={false}>
-            {toString(fromArray(filters))}
-          </Code>
-
-          <Code command="toQueryString(filters)" collapse={false}>
-            {toQueryString(fromArray(filters))}
-          </Code>
-
-          <Code command="toArray(filters)">
             <pre>{JSON.stringify(filters, null, 2)}</pre>
           </Code>
 
+          <Code command="toString(filters)" collapse={false}>
+            {toString(filters)}
+          </Code>
+
+          <Code command="toQueryString(filters)" collapse={false}>
+            {toQueryString(filters)}
+          </Code>
+
           <Code command="toMongoQuery(filters)">
-            <pre>
-              {JSON.stringify(toMongoQuery(fromArray(filters)), null, 2)}
-            </pre>
+            <pre>{JSON.stringify(toMongoQuery(filters), null, 2)}</pre>
           </Code>
         </div>
       </main>
